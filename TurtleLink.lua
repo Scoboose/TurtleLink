@@ -64,29 +64,16 @@ local function Initialize()
     closeButton:SetPoint("TOPRIGHT", copyFrame, "TOPRIGHT", 2, 2)
     closeButton:SetScript("OnClick", function() copyFrame:Hide() end)
     
-    -- Create keyboard capture frame
-    local keyboardFrame = CreateFrame("Frame", "TurtleLinkKeyboardFrame", UIParent)
-    keyboardFrame.OnKeyDown = function()
-        if arg1 == "C" and IsControlKeyDown() and GameTooltip:IsShown() then
-            local itemID = GetItemIDFromTooltip()
-            if itemID then
-                ShowCopyWindow(itemID)
+    -- Set up polling timer for Ctrl+C detection
+    f:SetScript("OnUpdate", function()
+        if IsControlKeyDown() and GameTooltip:IsShown() and GameTooltip.itemLink then
+            if IsShiftKeyDown() then  -- Use Ctrl+Shift instead of just Ctrl
+                local itemID = GetItemIDFromTooltip()
+                if itemID then
+                    ShowCopyWindow(itemID)
+                end
             end
         end
-    end
-    keyboardFrame:SetScript("OnKeyDown", keyboardFrame.OnKeyDown)
-
-    -- Hook GameTooltip using old style hooks
-    local oldGameTooltipOnShow = GameTooltip:GetScript("OnShow")
-    GameTooltip:SetScript("OnShow", function()
-        if oldGameTooltipOnShow then oldGameTooltipOnShow() end
-        keyboardFrame:EnableKeyboard(true)
-    end)
-
-    local oldGameTooltipOnHide = GameTooltip:GetScript("OnHide")
-    GameTooltip:SetScript("OnHide", function()
-        if oldGameTooltipOnHide then oldGameTooltipOnHide() end
-        keyboardFrame:EnableKeyboard(false)
     end)
 end
 
@@ -97,6 +84,6 @@ end
 function TurtleLink_OnEvent(event, arg1, arg2, arg3)
     if event == "ADDON_LOADED" and arg1 == "TurtleLink" then
         Initialize()
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ccff[TurtleLink]|r: Initialized. |cffffffffUse Ctrl+C while hovering over items.|r")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ccff[TurtleLink]|r: Initialized. |cffffffffUse Ctrl+Shift while hovering over items.|r")
     end
 end
