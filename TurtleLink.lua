@@ -12,19 +12,23 @@ local function GetItemIDFromTooltip()
 end
 
 -- Function to show the copy window with an item ID
-local function ShowCopyWindow(itemID)
+local function ShowCopyWindow(itemID, isAuctionLink)
     if not copyFrame:IsShown() then
         copyFrame:Show()
     end
     local editBox = getglobal("ItemIDCopyEditBox")
-    editBox:SetText("|cff00ccffhttps://database.turtle-wow.org/?item=|r|cffffffff"..itemID.."|r")
+    if isAuctionLink then
+        editBox:SetText("|cff00ccffhttps://www.wowauctions.net/auctionHouse/turtle-wow/nordanaar/mergedAh/|r|cffffffff"..itemID.."|r")
+    else
+        editBox:SetText("|cff00ccffhttps://database.turtle-wow.org/?item=|r|cffffffff"..itemID.."|r")
+    end
     editBox:HighlightText()
 end
 
 -- Initialize variables
 local function Initialize()
     copyFrame = CreateFrame("Frame", "ItemIDCopyCopyFrame", UIParent)
-    copyFrame:SetWidth(400)  -- Increased from 200
+    copyFrame:SetWidth(460)  -- Increased from 200
     copyFrame:SetHeight(60) -- Increased from 100
     copyFrame:SetPoint("CENTER", UIParent, "CENTER")
     copyFrame:SetBackdrop({
@@ -47,7 +51,7 @@ local function Initialize()
     -- Create editbox
     local editBox = CreateFrame("EditBox", "ItemIDCopyEditBox", copyFrame)
     editBox:SetPoint("TOP", titleText, "BOTTOM", 0, -5)
-    editBox:SetWidth(360)    -- Increased from 160
+    editBox:SetWidth(420)    -- Increased from 160
     editBox:SetHeight(20)
     editBox:SetAutoFocus(true)
     editBox:SetFontObject(ChatFontNormal)
@@ -67,10 +71,15 @@ local function Initialize()
     -- Set up polling timer for Ctrl+C detection
     f:SetScript("OnUpdate", function()
         if IsControlKeyDown() and GameTooltip:IsShown() and GameTooltip.itemLink then
-            if IsShiftKeyDown() then  -- Use Ctrl+Shift instead of just Ctrl
+            if IsShiftKeyDown() then  -- Use Ctrl+Shift for database link
                 local itemID = GetItemIDFromTooltip()
                 if itemID then
-                    ShowCopyWindow(itemID)
+                    ShowCopyWindow(itemID, false)
+                end
+            elseif IsAltKeyDown() then  -- Use Ctrl+Alt for auction link
+                local itemID = GetItemIDFromTooltip()
+                if itemID then
+                    ShowCopyWindow(itemID, true)
                 end
             end
         end
@@ -84,6 +93,6 @@ end
 function TurtleLink_OnEvent(event, arg1, arg2, arg3)
     if event == "ADDON_LOADED" and arg1 == "TurtleLink" then
         Initialize()
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ccff[TurtleLink]|r: Initialized. |cffffffffUse Ctrl+Shift while hovering over items.|r")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ccff[TurtleLink]|r: Initialized. |cffffffffUse Ctrl+Shift for database link, Ctrl+Alt for auction link.|r")
     end
 end
