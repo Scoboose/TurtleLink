@@ -17,7 +17,7 @@ local function ShowCopyWindow(itemID)
         copyFrame:Show()
     end
     local editBox = getglobal("ItemIDCopyEditBox")
-    editBox:SetText("https://database.turtle-wow.org/?item="..itemID)
+    editBox:SetText("|cff00ccffhttps://database.turtle-wow.org/?item=|r|cffffffff"..itemID.."|r")
     editBox:HighlightText()
 end
 
@@ -37,6 +37,7 @@ local function Initialize()
     })
     copyFrame:SetBackdropColor(0, 0, 0, 0.8)
     copyFrame:Hide()
+    copyFrame:EnableKeyboard(true)
     
     -- Create title text
     local titleText = copyFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -50,6 +51,7 @@ local function Initialize()
     editBox:SetHeight(20)
     editBox:SetAutoFocus(true)
     editBox:SetFontObject(ChatFontNormal)
+    editBox:SetScript("OnEscapePressed", function() copyFrame:Hide() end)
     
     -- Create background for editbox
     local editBoxBackground = copyFrame:CreateTexture(nil, "BACKGROUND")
