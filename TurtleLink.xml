@@ -1,0 +1,13 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Script file="TurtleLink.lua"/>
+    <Frame name="TurtleLinkFrame" hidden="false" parent="UIParent">
+        <Scripts>
+            <OnLoad>
+                TurtleLink_OnLoad();
+            </OnLoad>
+            <OnEvent>
+                TurtleLink_OnEvent(event, arg1, arg2, arg3);
+            </OnEvent>
+        </Scripts>
+    </Frame>
+</Ui>

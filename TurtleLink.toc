@@ -1,0 +1,7 @@
+## Interface: 11200
+## Title: TurtleLink
+## Notes: Press Ctrl+C while hovering over an item to get the turtle DB link
+## Author: Pokey
+## Version: 1.0
+
+TurtleLink.xml
