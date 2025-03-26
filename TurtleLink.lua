@@ -38,9 +38,14 @@ local function Initialize()
     copyFrame:SetBackdropColor(0, 0, 0, 0.8)
     copyFrame:Hide()
     
+    -- Create title text
+    local titleText = copyFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    titleText:SetPoint("TOP", copyFrame, "TOP", 0, -8)
+    titleText:SetText("Turtle Link")
+    
     -- Create editbox
     local editBox = CreateFrame("EditBox", "ItemIDCopyEditBox", copyFrame)
-    editBox:SetPoint("TOP", copyFrame, "TOP", 0, -20)
+    editBox:SetPoint("TOP", titleText, "BOTTOM", 0, -5)
     editBox:SetWidth(360)    -- Increased from 160
     editBox:SetHeight(20)
     editBox:SetAutoFocus(true)
@@ -90,6 +95,6 @@ end
 function TurtleLink_OnEvent(event, arg1, arg2, arg3)
     if event == "ADDON_LOADED" and arg1 == "TurtleLink" then
         Initialize()
-        DEFAULT_CHAT_FRAME:AddMessage("TurtleLink: Initialized. Use Ctrl+C while hovering over items.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ccff[TurtleLink]|r: Initialized. |cffffffffUse Ctrl+C while hovering over items.|r")
     end
 end
